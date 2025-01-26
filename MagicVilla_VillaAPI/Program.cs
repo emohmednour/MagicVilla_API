@@ -1,36 +1,51 @@
+using MagicVilla_VillaAPI;
+using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.Repository;
+using MagicVilla_VillaAPI.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
-namespace MagicVilla_VillaAPI
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+var connection = builder.Configuration.GetConnectionString("cs");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
+    options.UseSqlServer(connection);
+});
 
 
-            app.MapControllers();
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
-            app.Run();
-        }
-    }
+builder.Services.AddScoped<IVillaRepository, VillaRepository>();
+builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
+
+
+
+
+// Add services to the container.
+
+builder.Services.AddControllers(options =>
+{
+    //options.ReturnHttpNotAcceptable =  true;
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+
+app.MapControllers();
+
+app.Run();
