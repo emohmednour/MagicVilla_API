@@ -50,7 +50,8 @@ namespace MagicVilla_VillaAPI.Repository
             return await quary.FirstOrDefaultAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null,
+            int sizepage = 0 , int pageNumber = 1)
         {
             IQueryable<T> quary = DBSet;
             if (filter != null)
@@ -64,6 +65,18 @@ namespace MagicVilla_VillaAPI.Repository
                     quary = quary.Include(includeProp);
                 }
             }
+
+            if (sizepage > 0 )
+            {
+                if(sizepage > 100)
+                {
+                    sizepage = 100;
+                }
+                quary = quary.Skip(sizepage * (pageNumber - 1)).Take(sizepage);
+
+            }
+
+
             return await quary.ToListAsync();
 
 

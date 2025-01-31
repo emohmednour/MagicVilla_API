@@ -17,59 +17,64 @@ namespace MagicVilla_web.Services
             villaUrl = configuration.GetValue<string>("ServiceUrls:VillaAPI");
         }
 
-        public  Task<T> CreateAsync<T>(VillaCreateDto createDto)
+        public  Task<T> CreateAsync<T>(VillaCreateDto createDto,string token)
         {
             return  SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APItype.POST,
                 Data = createDto,
-                Url = villaUrl + "/api/villaApi"
+                Url = villaUrl + "/api/v1/villaApi",
+                Token = token
 
 
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token)
         {
             return  SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APItype.DELETE,
                
-                Url = villaUrl + "/api/villaApi/"+id
+                Url = villaUrl + "/api/v1/villaApi/" + id,
+                Token = token
 
 
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APItype.GET,
-                Url = villaUrl + "/api/villaApi"
+                Url = villaUrl + "/api/v1/villaApi",
+                Token = token
 
 
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id , string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APItype.GET,
-                Url = villaUrl + "/api/villaApi/"+id
+                Url = villaUrl + "/api/v1/villaApi/" + id,
+                Token = token
 
 
             });
         }
 
-        public Task<T> UpdateAsync<T>(VillaUpdateDto updateDto)
+        public Task<T> UpdateAsync<T>(VillaUpdateDto updateDto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APItype.PUT,
                 Data = updateDto,
-                Url = villaUrl + "/api/villaApi/"+updateDto.Id
+                Url = villaUrl + "/api/v1/villaApi/" + updateDto.Id,
+                Token = token
 
 
             });
