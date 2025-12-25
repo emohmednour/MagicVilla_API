@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.DTO;
 using MagicVilla_VillaAPI.Repository.IRepository;
@@ -15,6 +16,7 @@ namespace MagicVilla_VillaAPI.Controllers.v1
     //[Route("api/[controller]")] 
     [Route("api/v{version:apiVersion}/VillaAPI")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class VillaAPIController : ControllerBase
     {
         protected APIResponse _response;
@@ -139,7 +141,7 @@ namespace MagicVilla_VillaAPI.Controllers.v1
                 _response.Result = _mapper.Map<VillaDto>(model);
                 _response.HttpStatusCode = HttpStatusCode.Created;
 
-                return CreatedAtRoute("GetVilla", new { id = model.Id }, _response);
+                return CreatedAtRoute("GetVilla", new { id = model.Id, version = "1.0" }, _response);
             }
             catch (Exception ex)
             {
@@ -248,7 +250,7 @@ namespace MagicVilla_VillaAPI.Controllers.v1
             Villa model = _mapper.Map<Villa>(villaDto);
 
 
-            await _DbVilla.UpdateAsync(villa);
+            await _DbVilla.UpdateAsync(model);
 
             if (!ModelState.IsValid)
             {

@@ -25,6 +25,7 @@ namespace MagicVilla_VillaAPI.Controllers.v1
         {
             _DbVillaNumber = DbVillaNumber;
             _villa = villa;
+            
             _mapper = mapper;
             _response = new APIResponse();
         }
